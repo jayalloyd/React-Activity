@@ -22,6 +22,7 @@ function Script() {
 
     return (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
+            <h2>Select your favourite food:</h2>
             {foods.map((item, index) => (
                 <button 
                     key={index}
