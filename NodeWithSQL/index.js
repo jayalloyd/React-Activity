@@ -6,10 +6,13 @@ const connection = mysql.createConnection({
   database: 'dogs',
   password: 'password',
 });
-try{connection.query("SHOW TABLES",
- 
-  (err, results)=>{
+let q="INSERT INTO user (id, name, email, password) VALUES (?,?, ?, ?)";
+let user=["123", 'john', 'john@zmail.com', 'password'];
+try{connection.query(q, user, (err, results)=>{
     if(err)throw err;
+ 
+
+
  console.log(results); // results contains rows returned by server
  
 });}
