@@ -1,33 +1,35 @@
 const { faker } = require('@faker-js/faker');
 const mysql = require('mysql2');
+
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   database: 'dogs',
   password: 'password',
 });
-let q="INSERT INTO user (id, name, email, password) VALUES (?,?, ?, ?)";
-let user=["123", 'john', 'john@zmail.com', 'password'];
-try{connection.query(q, user, (err, results)=>{
-    if(err)throw err;
- 
 
+// Generate random user data
+const getRandomUser = () => {
+  return [
+    faker.string.uuid(),
+    faker.internet.username(), // Correct casing
+    faker.internet.email(),
+    faker.internet.password(),
+  ];
+};
 
- console.log(results); // results contains rows returned by server
- 
-});}
-catch{
-  console.log(err);
+const users = [];
+for (let i = 0; i < 100; i++) {
+  users.push(getRandomUser());
 }
 
-connection.end();
-let  getRandomUser=() => {
-    return {
-      id: faker.string.uuid(),
-      username: faker.internet.username(), // before version 9.1.0, use userName()
-      email: faker.internet.email(),
-     password: faker.internet.password(),
-     
-    };
+const query = 'INSERT INTO user (id, name, email, password) VALUES ?';
+
+connection.query(query, [users], (err, result) => {
+  if (err) {
+    console.error('Error inserting users:', err);
+  } else {
+    console.log('Successfully inserted users:', result.affectedRows);
   }
-  // console.log(getRandomUser());
+  connection.end(); // End connection here after query is complete
+});
