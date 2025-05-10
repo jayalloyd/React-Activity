@@ -42,20 +42,35 @@ const getRandomUser = () => {
 // });
 app.get("/", (req, res) => {
   const query = "SELECT COUNT(*) AS count FROM user";
-  
+  try{
   connection.query(query, (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send("Database query error");
-    }
-    
-    const count = result[0].count;
-    res.render("home.ejs", { count: count });
+    if (err) throw err; 
+    let count = result[0]["count"];
+          console.log(result[0]["count(*)"]);
+          res.render("home.ejs",{count});
   });
-});
+  }catch(err){
+    console.log(err);
+    res.send("some error occurred");
+        } 
+      
+    });
+    //show route
+app.get("/user", (req, res) => {
+  let q='SELECT * FROM user';
+  try{
+  connection.query(q, (err, result) => {
+    if (err) throw err; 
+    let users = result;
 
-
-   ;
+    res.render("users.ejs",{users}); 
+  })
+  }
+catch(err){
+  console.log(err);
+  res.send("some error occurred");
+        }});
+   
 app.listen("8080",()=>{
     console.log("Server is running on port 8080")
 });
